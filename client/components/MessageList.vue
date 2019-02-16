@@ -1,14 +1,12 @@
 <template>
-	<div
-		ref="chat"
-		class="chat"
-		tabindex="-1">
-		<div :class="['show-more', { show: channel.moreHistoryAvailable }]">
+	<div ref="chat" class="chat" tabindex="-1">
+		<div :class="['show-more', {show: channel.moreHistoryAvailable}]">
 			<button
 				ref="loadMoreButton"
 				:disabled="channel.historyLoading || !$root.isConnected"
 				class="btn"
-				@click="onShowMoreClick">
+				@click="onShowMoreClick"
+			>
 				<span v-if="channel.historyLoading">Loading…</span>
 				<span v-else>Show older messages</span>
 			</button>
@@ -18,16 +16,19 @@
 			role="log"
 			aria-live="polite"
 			aria-relevant="additions"
-			@copy="onCopy">
+			@copy="onCopy"
+		>
 			<template v-for="(message, id) in condensedMessages">
 				<DateMarker
 					v-if="shouldDisplayDateMarker(message, id)"
 					:key="message.id + '-date'"
-					:message="message" />
+					:message="message"
+				/>
 				<div
 					v-if="shouldDisplayUnreadMarker(message.id)"
 					:key="message.id + '-unread'"
-					class="unread-marker">
+					class="unread-marker"
+				>
 					<span class="unread-marker-text" />
 				</div>
 
@@ -36,14 +37,16 @@
 					:key="message.id"
 					:network="network"
 					:keep-scroll-position="keepScrollPosition"
-					:messages="message.messages" />
+					:messages="message.messages"
+				/>
 				<Message
 					v-else
 					:key="message.id"
 					:network="network"
 					:message="message"
 					:keep-scroll-position="keepScrollPosition"
-					@linkPreviewToggle="onLinkPreviewToggle" />
+					@linkPreviewToggle="onLinkPreviewToggle"
+				/>
 			</template>
 		</div>
 	</div>
@@ -78,7 +81,9 @@ export default {
 
 			// If actions are hidden, just return a message list with them excluded
 			if (this.$root.settings.statusMessages === "hidden") {
-				return this.channel.messages.filter((message) => !constants.condensedTypes.includes(message.type));
+				return this.channel.messages.filter(
+					(message) => !constants.condensedTypes.includes(message.type)
+				);
 			}
 
 			// If actions are not condensed, just return raw message list
@@ -92,7 +97,11 @@ export default {
 			for (const message of this.channel.messages) {
 				// If this message is not condensable, or its an action affecting our user,
 				// then just append the message to container and be done with it
-				if (message.self || message.highlight || !constants.condensedTypes.includes(message.type)) {
+				if (
+					message.self ||
+					message.highlight ||
+					!constants.condensedTypes.includes(message.type)
+				) {
 					lastCondensedContainer = null;
 
 					condensed.push(message);
@@ -153,16 +162,21 @@ export default {
 			}
 
 			if (window.IntersectionObserver) {
-				this.historyObserver = new window.IntersectionObserver(this.onLoadButtonObserved, {
-					root: this.$refs.chat,
-				});
+				this.historyObserver = new window.IntersectionObserver(
+					this.onLoadButtonObserved,
+					{
+						root: this.$refs.chat,
+					}
+				);
 			}
 
 			this.jumpToBottom();
 		});
 	},
 	mounted() {
-		this.$refs.chat.addEventListener("scroll", this.handleScroll, {passive: true});
+		this.$refs.chat.addEventListener("scroll", this.handleScroll, {
+			passive: true,
+		});
 
 		this.$root.$on("resize", this.handleResize);
 
@@ -192,7 +206,10 @@ export default {
 				return true;
 			}
 
-			return (new Date(previousMessage.time)).getDay() !== (new Date(message.time)).getDay();
+			return (
+				new Date(previousMessage.time).getDay() !==
+				new Date(message.time).getDay()
+			);
 		},
 		shouldDisplayUnreadMarker(id) {
 			if (!this.unreadMarkerShown && id > this.channel.firstUnread) {
@@ -286,7 +303,8 @@ export default {
 				return;
 			}
 
-			this.channel.scrolledToBottom = el.scrollHeight - el.scrollTop - el.offsetHeight <= 30;
+			this.channel.scrolledToBottom =
+				el.scrollHeight - el.scrollTop - el.offsetHeight <= 30;
 		},
 		handleResize() {
 			// Keep message list scrolled to bottom on resize

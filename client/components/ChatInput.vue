@@ -1,9 +1,5 @@
 <template>
-	<form
-		id="form"
-		method="post"
-		action=""
-		@submit.prevent="onSubmit">
+	<form id="form" method="post" action="" @submit.prevent="onSubmit">
 		<span id="nick">{{ network.nick }}</span>
 		<textarea
 			id="input"
@@ -13,33 +9,34 @@
 			:aria-label="getInputPlaceholder(channel)"
 			class="mousetrap"
 			@input="setPendingMessage"
-			@keypress.enter.exact.prevent="onSubmit" />
+			@keypress.enter.exact.prevent="onSubmit"
+		/>
 		<span
 			v-if="this.$root.isFileUploadEnabled"
 			id="upload-tooltip"
 			class="tooltipped tooltipped-w tooltipped-no-touch"
 			aria-label="Upload File"
-			@click="openFileUpload">
-			<input
-				id="upload-input"
-				ref="uploadInput"
-				type="file"
-				multiple>
+			@click="openFileUpload"
+		>
+			<input id="upload-input" ref="uploadInput" type="file" multiple />
 			<button
 				id="upload"
 				type="button"
 				aria-label="Upload file"
-				:disabled="!this.$root.isConnected" />
+				:disabled="!this.$root.isConnected"
+			/>
 		</span>
 		<span
 			id="submit-tooltip"
 			class="tooltipped tooltipped-w tooltipped-no-touch"
-			aria-label="Send message">
+			aria-label="Send message"
+		>
 			<button
 				id="submit"
 				type="submit"
 				aria-label="Send message"
-				:disabled="!this.$root.isConnected" />
+				:disabled="!this.$root.isConnected"
+			/>
 		</span>
 	</form>
 </template>
@@ -73,7 +70,7 @@ const bracketWraps = {
 	"*": "*",
 	"`": "`",
 	"~": "~",
-	"_": "_",
+	_: "_",
 };
 
 export default {
@@ -118,23 +115,33 @@ export default {
 		});
 
 		inputTrap.bind(["up", "down"], (e, key) => {
-			if (this.$root.isAutoCompleting || e.target.selectionStart !== e.target.selectionEnd) {
+			if (
+				this.$root.isAutoCompleting ||
+				e.target.selectionStart !== e.target.selectionEnd
+			) {
 				return;
 			}
 
 			if (this.channel.inputHistoryPosition === 0) {
-				this.channel.inputHistory[this.channel.inputHistoryPosition] = this.channel.pendingMessage;
+				this.channel.inputHistory[
+					this.channel.inputHistoryPosition
+				] = this.channel.pendingMessage;
 			}
 
 			if (key === "up") {
-				if (this.channel.inputHistoryPosition < this.channel.inputHistory.length - 1) {
+				if (
+					this.channel.inputHistoryPosition <
+					this.channel.inputHistory.length - 1
+				) {
 					this.channel.inputHistoryPosition++;
 				}
 			} else if (this.channel.inputHistoryPosition > 0) {
 				this.channel.inputHistoryPosition--;
 			}
 
-			this.channel.pendingMessage = this.$refs.input.value = this.channel.inputHistory[this.channel.inputHistoryPosition];
+			this.channel.pendingMessage = this.$refs.input.value = this.channel.inputHistory[
+				this.channel.inputHistoryPosition
+			];
 			this.setInputSize();
 
 			return false;
@@ -165,7 +172,9 @@ export default {
 				// Use scrollHeight to calculate how many lines there are in input, and ceil the value
 				// because some browsers tend to incorrently round the values when using high density
 				// displays or using page zoom feature
-				this.$refs.input.style.height = Math.ceil(this.$refs.input.scrollHeight / lineHeight) * lineHeight + "px";
+				this.$refs.input.style.height =
+					Math.ceil(this.$refs.input.scrollHeight / lineHeight) * lineHeight +
+					"px";
 			});
 		},
 		getInputPlaceholder(channel) {
