@@ -1,5 +1,4 @@
 ---
-
 root: true
 
 parserOptions:
@@ -39,7 +38,7 @@ rules:
   no-else-return: error
   no-implicit-globals: error
   no-multi-spaces: error
-  no-multiple-empty-lines: [error, { "max": 1 }]
+  no-multiple-empty-lines: [error, {"max": 1}]
   no-shadow: error
   no-template-curly-in-string: error
   no-trailing-spaces: error
@@ -92,7 +91,8 @@ rules:
   vue/require-default-prop: off
   vue/no-v-html: off
   vue/no-use-v-if-with-v-for: off
-  vue/html-closing-bracket-newline: [error, {singleline: never, multiline: never}]
+  vue/html-closing-bracket-newline:
+    [error, {singleline: never, multiline: never}]
   vue/multiline-html-element-content-newline: off
   vue/singleline-html-element-content-newline: off
 
