@@ -39,7 +39,12 @@ describe("Commands", function() {
 			test("MODE xPaw -w", ["xPaw", "-w"]);
 			test("MODE #thelounge +o xPaw", ["#thelounge", "+o", "xPaw"]);
 			test("MODE #thelounge -v xPaw", ["#thelounge", "-v", "xPaw"]);
-			test("MODE #thelounge +o-o xPaw Max-P", ["#thelounge", "+o-o", "xPaw", "Max-P"]);
+			test("MODE #thelounge +o-o xPaw Max-P", [
+				"#thelounge",
+				"+o-o",
+				"xPaw",
+				"Max-P",
+			]);
 			test("MODE #thelounge", ["#thelounge"]);
 		});
 

@@ -4,7 +4,10 @@ const colors = require("chalk");
 const read = require("read");
 
 function timestamp() {
-	const datetime = (new Date()).toISOString().split(".")[0].replace("T", " ");
+	const datetime = new Date()
+		.toISOString()
+		.split(".")[0]
+		.replace("T", " ");
 
 	return colors.dim(datetime);
 }
@@ -29,7 +32,9 @@ module.exports = {
 	/* eslint-enable no-console */
 
 	prompt(options, callback) {
-		options.prompt = [timestamp(), colors.cyan("[PROMPT]"), options.text].join(" ");
+		options.prompt = [timestamp(), colors.cyan("[PROMPT]"), options.text].join(
+			" "
+		);
 		read(options, callback);
 	},
 };

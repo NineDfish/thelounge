@@ -25,7 +25,9 @@ module.exports = {
 function findCurrentNetworkChan(name) {
 	name = name.toLowerCase();
 
-	return vueApp.activeChannel.network.channels.find((c) => c.name.toLowerCase() === name);
+	return vueApp.activeChannel.network.channels.find(
+		(c) => c.name.toLowerCase() === name
+	);
 }
 
 // Given a channel element will determine if the lounge user or a given nick is one of the supplied roles.
@@ -37,7 +39,9 @@ function hasRoleInChannel(channel, roles, nick) {
 	const channelID = channel.attr("data-id");
 	const network = $("#sidebar .network").has(`.chan[data-id="${channelID}"]`);
 	const target = nick || network.attr("data-nick");
-	const user = channel.find(`.names .user[data-name="${escape(target)}"]`).first();
+	const user = channel
+		.find(`.names .user[data-name="${escape(target)}"]`)
+		.first();
 	return user.parent().is("." + roles.join(", ."));
 }
 
@@ -85,7 +89,9 @@ function updateTitle() {
 	let title = vueApp.appName;
 
 	if (vueApp.activeChannel) {
-		title = `${vueApp.activeChannel.channel.name} — ${vueApp.activeChannel.network.name} — ${title}`;
+		title = `${vueApp.activeChannel.channel.name} — ${
+			vueApp.activeChannel.network.name
+		} — ${title}`;
 	}
 
 	// add highlight count to title
@@ -120,7 +126,9 @@ function togglePasswordField(elem) {
 // Given a element, swap its aria-label with the content of `data-alt-label`
 function swapLabel(element) {
 	const altText = element.data("alt-label");
-	element.data("alt-label", element.attr("aria-label")).attr("aria-label", altText);
+	element
+		.data("alt-label", element.attr("aria-label"))
+		.attr("aria-label", altText);
 }
 
 function confirmExit() {
@@ -135,7 +143,7 @@ function move(array, old_index, new_index) {
 	if (new_index >= array.length) {
 		let k = new_index - array.length;
 
-		while ((k--) + 1) {
+		while (k-- + 1) {
 			this.push(undefined);
 		}
 	}
@@ -152,7 +160,8 @@ function closeChan(chan) {
 		cmd = "/quit";
 		const server = chan.find(".name").html();
 
-		if (!confirm(`Are you sure you want to remove ${server}?`)) { // eslint-disable-line no-alert
+		if (!confirm(`Are you sure you want to remove ${server}?`)) {
+			// eslint-disable-line no-alert
 			return false;
 		}
 	}

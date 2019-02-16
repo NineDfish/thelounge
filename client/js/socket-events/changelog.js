@@ -62,6 +62,7 @@ $("#help").on("click", "#check-now", () => {
 // Given a status and latest release information, update the version checker
 // (CSS class and content)
 function renderVersionChecker({status, latest}) {
-	$("#version-checker").prop("class", status)
+	$("#version-checker")
+		.prop("class", status)
 		.html(templates.version_checker({latest, status}));
 }

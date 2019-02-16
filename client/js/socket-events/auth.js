@@ -10,7 +10,11 @@ const {vueApp} = require("../vue");
 socket.on("auth", function(data) {
 	// If we reconnected and serverHash differs, that means the server restarted
 	// And we will reload the page to grab the latest version
-	if (utils.serverHash > -1 && data.serverHash > -1 && data.serverHash !== utils.serverHash) {
+	if (
+		utils.serverHash > -1 &&
+		data.serverHash > -1 &&
+		data.serverHash !== utils.serverHash
+	) {
 		socket.disconnect();
 		vueApp.isConnected = false;
 		vueApp.currentUserVisibleError = "Server restarted, reloading…";
@@ -62,9 +66,12 @@ socket.on("auth", function(data) {
 		storage.remove("token");
 
 		const error = login.find(".error");
-		error.show().closest("form").one("submit", function() {
-			error.hide();
-		});
+		error
+			.show()
+			.closest("form")
+			.one("submit", function() {
+				error.hide();
+			});
 	} else if (user) {
 		token = storage.get("token");
 

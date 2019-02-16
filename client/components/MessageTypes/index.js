@@ -7,7 +7,9 @@
 const requireViews = require.context(".", false, /\.vue$/);
 
 module.exports = requireViews.keys().reduce((acc, path) => {
-	acc["message-" + path.substring(2, path.length - 4)] = requireViews(path).default;
+	acc["message-" + path.substring(2, path.length - 4)] = requireViews(
+		path
+	).default;
 
 	return acc;
 }, {});

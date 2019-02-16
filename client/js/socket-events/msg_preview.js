@@ -11,7 +11,9 @@ socket.on("msg:preview", function(data) {
 		return;
 	}
 
-	const previewIndex = message.previews.findIndex((m) => m.link === data.preview.link);
+	const previewIndex = message.previews.findIndex(
+		(m) => m.link === data.preview.link
+	);
 
 	if (previewIndex > -1) {
 		vueApp.$set(message.previews, previewIndex, data.preview);

@@ -43,7 +43,9 @@ function simpleLdapAuth(user, password, callback) {
 	const userDN = user.replace(/([,\\/#+<>;"= ])/g, "\\$1");
 	const bindDN = `${config.ldap.primaryKey}=${userDN},${config.ldap.baseDN}`;
 
-	log.info(`Auth against LDAP ${config.ldap.url} with provided bindDN ${bindDN}`);
+	log.info(
+		`Auth against LDAP ${config.ldap.url} with provided bindDN ${bindDN}`
+	);
 
 	ldapAuthCommon(user, bindDN, password, callback);
 }
@@ -67,7 +69,9 @@ function advancedLdapAuth(user, password, callback) {
 	const base = config.ldap.searchDN.base;
 	const searchOptions = {
 		scope: config.ldap.searchDN.scope,
-		filter: `(&(${config.ldap.primaryKey}=${userDN})${config.ldap.searchDN.filter})`,
+		filter: `(&(${config.ldap.primaryKey}=${userDN})${
+			config.ldap.searchDN.filter
+		})`,
 		attributes: ["dn"],
 	};
 
@@ -76,43 +80,55 @@ function advancedLdapAuth(user, password, callback) {
 		callback(false);
 	});
 
-	ldapclient.bind(config.ldap.searchDN.rootDN, config.ldap.searchDN.rootPassword, function(err) {
-		if (err) {
-			log.error("Invalid LDAP root credentials");
-			ldapclient.unbind();
-			callback(false);
-		} else {
-			ldapclient.search(base, searchOptions, function(err2, res) {
-				if (err2) {
-					log.warn(`LDAP User not found: ${userDN}`);
-					ldapclient.unbind();
-					callback(false);
-				} else {
-					let found = false;
-					res.on("searchEntry", function(entry) {
-						found = true;
-						const bindDN = entry.objectName;
-						log.info(`Auth against LDAP ${config.ldap.url} with found bindDN ${bindDN}`);
+	ldapclient.bind(
+		config.ldap.searchDN.rootDN,
+		config.ldap.searchDN.rootPassword,
+		function(err) {
+			if (err) {
+				log.error("Invalid LDAP root credentials");
+				ldapclient.unbind();
+				callback(false);
+			} else {
+				ldapclient.search(base, searchOptions, function(err2, res) {
+					if (err2) {
+						log.warn(`LDAP User not found: ${userDN}`);
 						ldapclient.unbind();
-
-						ldapAuthCommon(user, bindDN, password, callback);
-					});
-					res.on("error", function(err3) {
-						log.error(`LDAP error: ${err3}`);
 						callback(false);
-					});
-					res.on("end", function(result) {
-						ldapclient.unbind();
+					} else {
+						let found = false;
+						res.on("searchEntry", function(entry) {
+							found = true;
+							const bindDN = entry.objectName;
+							log.info(
+								`Auth against LDAP ${
+									config.ldap.url
+								} with found bindDN ${bindDN}`
+							);
+							ldapclient.unbind();
 
-						if (!found) {
-							log.warn(`LDAP Search did not find anything for: ${userDN} (${result.status})`);
+							ldapAuthCommon(user, bindDN, password, callback);
+						});
+						res.on("error", function(err3) {
+							log.error(`LDAP error: ${err3}`);
 							callback(false);
-						}
-					});
-				}
-			});
+						});
+						res.on("end", function(result) {
+							ldapclient.unbind();
+
+							if (!found) {
+								log.warn(
+									`LDAP Search did not find anything for: ${userDN} (${
+										result.status
+									})`
+								);
+								callback(false);
+							}
+						});
+					}
+				});
+			}
 		}
-	});
+	);
 }
 
 function ldapAuth(manager, client, user, password, callback) {

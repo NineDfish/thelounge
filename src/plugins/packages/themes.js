@@ -14,16 +14,19 @@ module.exports = {
 };
 
 function loadLocalThemes() {
-	fs.readdir(path.join(__dirname, "..", "..", "..", "public", "themes"), (err, builtInThemes) => {
-		if (err) {
-			return;
-		}
+	fs.readdir(
+		path.join(__dirname, "..", "..", "..", "public", "themes"),
+		(err, builtInThemes) => {
+			if (err) {
+				return;
+			}
 
-		builtInThemes
-			.filter((theme) => theme.endsWith(".css"))
-			.map(makeLocalThemeObject)
-			.forEach((theme) => themes.set(theme.name, theme));
-	});
+			builtInThemes
+				.filter((theme) => theme.endsWith(".css"))
+				.map(makeLocalThemeObject)
+				.forEach((theme) => themes.set(theme.name, theme));
+		}
+	);
 }
 
 function addTheme(packageName, packageObject) {

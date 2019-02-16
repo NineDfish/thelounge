@@ -40,7 +40,8 @@ module.exports = function(irc, network) {
 		lobby.pushMessage(client, msg, true);
 
 		if (irc.connection.registered === false) {
-			const random = (data.nick || irc.user.nick) + Math.floor(Math.random() * 10);
+			const random =
+				(data.nick || irc.user.nick) + Math.floor(Math.random() * 10);
 			irc.changeNick(random);
 		}
 

@@ -9,8 +9,10 @@ exports.commands = ["close", "leave", "part"];
 exports.allowDisconnected = true;
 
 exports.input = function(network, chan, cmd, args) {
-	let target = args.length === 0 ? chan : _.find(network.channels, {name: args[0]});
-	let partMessage = args.length <= 1 ? Helper.config.leaveMessage : args.slice(1).join(" ");
+	let target =
+		args.length === 0 ? chan : _.find(network.channels, {name: args[0]});
+	let partMessage =
+		args.length <= 1 ? Helper.config.leaveMessage : args.slice(1).join(" ");
 
 	if (typeof target === "undefined") {
 		// In this case, we assume that the word args[0] is part of the leave
@@ -20,18 +22,25 @@ exports.input = function(network, chan, cmd, args) {
 	}
 
 	if (target.type === Chan.Type.LOBBY) {
-		chan.pushMessage(this, new Msg({
-			type: Msg.Type.ERROR,
-			text: "You can not part from networks, use /quit instead.",
-		}));
+		chan.pushMessage(
+			this,
+			new Msg({
+				type: Msg.Type.ERROR,
+				text: "You can not part from networks, use /quit instead.",
+			})
+		);
 		return;
 	}
 
 	// If target is not a channel or we are not connected, instantly remove the channel
 	// Otherwise send part to the server and wait for response
-	if (target.type !== Chan.Type.CHANNEL
-	|| target.state === Chan.State.PARTED
-	|| !network.irc || !network.irc.connection || !network.irc.connection.connected) {
+	if (
+		target.type !== Chan.Type.CHANNEL ||
+		target.state === Chan.State.PARTED ||
+		!network.irc ||
+		!network.irc.connection ||
+		!network.irc.connection.connected
+	) {
 		network.channels = _.without(network.channels, target);
 		target.destroy();
 		this.emit("part", {

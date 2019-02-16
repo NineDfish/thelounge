@@ -14,6 +14,8 @@ describe("HexIP", function() {
 		expect(Helper.ip2hex("0.0.0.999")).to.equal("00000000");
 		expect(Helper.ip2hex("localhost")).to.equal("00000000");
 		expect(Helper.ip2hex("::1")).to.equal("00000000");
-		expect(Helper.ip2hex("2606:2800:220:1:248:1893:25c8:1946")).to.equal("00000000");
+		expect(Helper.ip2hex("2606:2800:220:1:248:1893:25c8:1946")).to.equal(
+			"00000000"
+		);
 	});
 });

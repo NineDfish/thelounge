@@ -24,14 +24,13 @@ function initalizeConfig() {
 	if (!fs.existsSync(Helper.getConfigPath())) {
 		fsextra.ensureDirSync(Helper.getHomePath());
 		fs.chmodSync(Helper.getHomePath(), "0700");
-		fsextra.copySync(path.resolve(path.join(
-			__dirname,
-			"..",
-			"..",
-			"defaults",
-			"config.js"
-		)), Helper.getConfigPath());
-		log.info(`Configuration file created at ${colors.green(Helper.getConfigPath())}.`);
+		fsextra.copySync(
+			path.resolve(path.join(__dirname, "..", "..", "defaults", "config.js")),
+			Helper.getConfigPath()
+		);
+		log.info(
+			`Configuration file created at ${colors.green(Helper.getConfigPath())}.`
+		);
 	}
 
 	fsextra.ensureDirSync(Helper.getUsersPath());

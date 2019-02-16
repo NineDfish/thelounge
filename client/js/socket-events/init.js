@@ -14,9 +14,12 @@ socket.on("init", function(data) {
 	vueApp.currentUserVisibleError = "Rendering…";
 	$("#loading-page-message").text(vueApp.currentUserVisibleError);
 
-	const previousActive = vueApp.activeChannel && vueApp.activeChannel.channel.id;
+	const previousActive =
+		vueApp.activeChannel && vueApp.activeChannel.channel.id;
 
-	const networks = new Set(JSON.parse(storage.get("thelounge.networks.collapsed")));
+	const networks = new Set(
+		JSON.parse(storage.get("thelounge.networks.collapsed"))
+	);
 
 	for (const network of data.networks) {
 		network.isCollapsed = networks.has(network.uuid);
@@ -34,7 +37,9 @@ socket.on("init", function(data) {
 		network.isJoinChannelShown = currentNetwork.isJoinChannelShown;
 
 		for (const channel of network.channels) {
-			const currentChannel = currentNetwork.channels.find((c) => c.id === channel.id);
+			const currentChannel = currentNetwork.channels.find(
+				(c) => c.id === channel.id
+			);
 
 			if (!currentChannel) {
 				continue;
@@ -66,7 +71,10 @@ socket.on("init", function(data) {
 			storage.set("token", data.token);
 		}
 
-		webpush.configurePushNotifications(data.pushSubscription, data.applicationServerKey);
+		webpush.configurePushNotifications(
+			data.pushSubscription,
+			data.applicationServerKey
+		);
 
 		slideoutMenu.enable();
 
@@ -80,7 +88,11 @@ socket.on("init", function(data) {
 
 		// If The Lounge is opened on a small screen (less than 1024px), and we don't have stored
 		// user list state, close it by default
-		if (viewportWidth >= 1024 && isUserlistOpen !== "true" && isUserlistOpen !== "false") {
+		if (
+			viewportWidth >= 1024 &&
+			isUserlistOpen !== "true" &&
+			isUserlistOpen !== "false"
+		) {
 			isUserlistOpen = "true";
 		}
 

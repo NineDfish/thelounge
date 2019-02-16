@@ -54,7 +54,8 @@ Chan.prototype.pushMessage = function(client, msg, increasesUnread) {
 	msg.id = client.idMsg++;
 
 	// If this channel is open in any of the clients, do not increase unread counter
-	const isOpen = _.find(client.attachedClients, {openChannel: chan}) !== undefined;
+	const isOpen =
+		_.find(client.attachedClients, {openChannel: chan}) !== undefined;
 
 	if (msg.self) {
 		// reset counters/markers when receiving self-/echo-message
@@ -85,8 +86,14 @@ Chan.prototype.pushMessage = function(client, msg, increasesUnread) {
 
 	this.writeUserLog(client, msg);
 
-	if (Helper.config.maxHistory >= 0 && this.messages.length > Helper.config.maxHistory) {
-		const deleted = this.messages.splice(0, this.messages.length - Helper.config.maxHistory);
+	if (
+		Helper.config.maxHistory >= 0 &&
+		this.messages.length > Helper.config.maxHistory
+	) {
+		const deleted = this.messages.splice(
+			0,
+			this.messages.length - Helper.config.maxHistory
+		);
 
 		// If maxHistory is 0, image would be dereferenced before client had a chance to retrieve it,
 		// so for now, just don't implement dereferencing for this edge case.
@@ -116,7 +123,12 @@ Chan.prototype.dereferencePreviews = function(messages) {
 Chan.prototype.getSortedUsers = function(irc) {
 	const users = Array.from(this.users.values());
 
-	if (!irc || !irc.network || !irc.network.options || !irc.network.options.PREFIX) {
+	if (
+		!irc ||
+		!irc.network ||
+		!irc.network.options ||
+		!irc.network.options.PREFIX
+	) {
 		return users;
 	}
 
@@ -182,7 +194,8 @@ Chan.prototype.getFilteredClone = function(lastActiveChannel, lastMessage) {
 			} else {
 				// If channel is active, send up to 100 last messages, for all others send just 1
 				// Client will automatically load more messages whenever needed based on last seen messages
-				const messagesToSend = lastActiveChannel === true || this.id === lastActiveChannel ? 100 : 1;
+				const messagesToSend =
+					lastActiveChannel === true || this.id === lastActiveChannel ? 100 : 1;
 
 				newChannel[prop] = this[prop].slice(-messagesToSend);
 				newChannel.moreHistoryAvailable = this[prop].length > messagesToSend;
@@ -235,7 +248,9 @@ Chan.prototype.loadMessages = function(client, network) {
 		return;
 	}
 
-	const messageStorage = client.messageStorage.find((s) => s.canProvideMessages());
+	const messageStorage = client.messageStorage.find((s) =>
+		s.canProvideMessages()
+	);
 
 	if (!messageStorage) {
 		return;
@@ -265,7 +280,9 @@ Chan.prototype.loadMessages = function(client, network) {
 			});
 
 			if (network.irc.network.cap.isEnabled("znc.in/playback")) {
-				const from = Math.floor(messages[messages.length - 1].time.getTime() / 1000);
+				const from = Math.floor(
+					messages[messages.length - 1].time.getTime() / 1000
+				);
 
 				requestZncPlayback(this, network, from);
 			}

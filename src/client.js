@@ -64,7 +64,7 @@ const inputs = [
 	"whois",
 ].reduce(function(plugins, name) {
 	const plugin = require(`./plugins/inputs/${name}`);
-	plugin.commands.forEach((command) => plugins[command] = plugin);
+	plugin.commands.forEach((command) => (plugins[command] = plugin));
 	return plugins;
 }, {});
 
@@ -180,18 +180,26 @@ Client.prototype.connect = function(args) {
 				return;
 			}
 
-			channels.push(client.createChannel({
-				name: chan.name,
-				key: chan.key || "",
-				type: chan.type,
-			}));
+			channels.push(
+				client.createChannel({
+					name: chan.name,
+					key: chan.key || "",
+					type: chan.type,
+				})
+			);
 		});
 
 		if (badName && client.name) {
-			log.warn("User '" + client.name + "' on network '" + args.name + "' has an invalid channel which has been ignored");
+			log.warn(
+				"User '" +
+					client.name +
+					"' on network '" +
+					args.name +
+					"' has an invalid channel which has been ignored"
+			);
 		}
-	// `join` is kept for backwards compatibility when updating from versions <2.0
-	// also used by the "connect" window
+		// `join` is kept for backwards compatibility when updating from versions <2.0
+		// also used by the "connect" window
 	} else if (args.join) {
 		channels = args.join
 			.replace(/,/g, " ")
@@ -209,7 +217,11 @@ Client.prototype.connect = function(args) {
 
 	const network = new Network({
 		uuid: args.uuid,
-		name: String(args.name || (Helper.config.displayNetwork ? "" : Helper.config.defaults.name) || ""),
+		name: String(
+			args.name ||
+				(Helper.config.displayNetwork ? "" : Helper.config.defaults.name) ||
+				""
+		),
 		host: String(args.host || ""),
 		port: parseInt(args.port, 10),
 		tls: !!args.tls,
@@ -221,7 +233,10 @@ Client.prototype.connect = function(args) {
 		realname: String(args.realname || ""),
 		commands: args.commands || [],
 		ip: args.ip || (client.config && client.config.ip) || client.ip,
-		hostname: args.hostname || (client.config && client.config.hostname) || client.hostname,
+		hostname:
+			args.hostname ||
+			(client.config && client.config.hostname) ||
+			client.hostname,
 		channels: channels,
 		ignoreList: args.ignoreList ? args.ignoreList : [],
 	});
@@ -248,9 +263,14 @@ Client.prototype.connect = function(args) {
 	});
 
 	if (network.userDisconnected) {
-		network.channels[0].pushMessage(client, new Msg({
-			text: "You have manually disconnected from this network before, use /connect command to connect again.",
-		}), true);
+		network.channels[0].pushMessage(
+			client,
+			new Msg({
+				text:
+					"You have manually disconnected from this network before, use /connect command to connect again.",
+			}),
+			true
+		);
 	} else {
 		network.irc.connect();
 	}
@@ -271,7 +291,10 @@ Client.prototype.generateToken = function(callback) {
 };
 
 Client.prototype.calculateTokenHash = function(token) {
-	return crypto.createHash("sha512").update(token).digest("hex");
+	return crypto
+		.createHash("sha512")
+		.update(token)
+		.digest("hex");
 };
 
 Client.prototype.updateSession = function(token, ip, request) {
@@ -307,16 +330,20 @@ Client.prototype.updateSession = function(token, ip, request) {
 Client.prototype.setPassword = function(hash, callback) {
 	const client = this;
 
-	client.manager.updateUser(client.name, {
-		password: hash,
-	}, function(err) {
-		if (err) {
-			return callback(false);
-		}
+	client.manager.updateUser(
+		client.name,
+		{
+			password: hash,
+		},
+		function(err) {
+			if (err) {
+				return callback(false);
+			}
 
-		client.config.password = hash;
-		return callback(true);
-	});
+			client.config.password = hash;
+			return callback(true);
+		}
+	);
 };
 
 Client.prototype.input = function(data) {
@@ -344,10 +371,13 @@ Client.prototype.inputLine = function(data) {
 	// This is either a normal message or a command escaped with a leading '/'
 	if (text.charAt(0) !== "/" || text.charAt(1) === "/") {
 		if (target.chan.type === Chan.Type.LOBBY) {
-			target.chan.pushMessage(this, new Msg({
-				type: Msg.Type.ERROR,
-				text: "Messages can not be sent to lobbies.",
-			}));
+			target.chan.pushMessage(
+				this,
+				new Msg({
+					type: Msg.Type.ERROR,
+					text: "Messages can not be sent to lobbies.",
+				})
+			);
 			return;
 		}
 
@@ -374,10 +404,14 @@ Client.prototype.inputLine = function(data) {
 	}
 
 	if (!connected) {
-		target.chan.pushMessage(this, new Msg({
-			type: Msg.Type.ERROR,
-			text: "You are not connected to the IRC network, unable to send your command.",
-		}));
+		target.chan.pushMessage(
+			this,
+			new Msg({
+				type: Msg.Type.ERROR,
+				text:
+					"You are not connected to the IRC network, unable to send your command.",
+			})
+		);
 	}
 };
 
@@ -401,7 +435,10 @@ Client.prototype.compileCustomHighlights = function() {
 		return;
 	}
 
-	client.highlightRegex = new RegExp(`(?:^| |\t)(?:${highlightsTokens.join("|")})(?:\t| |$)`, "i");
+	client.highlightRegex = new RegExp(
+		`(?:^| |\t)(?:${highlightsTokens.join("|")})(?:\t| |$)`,
+		"i"
+	);
 };
 
 Client.prototype.more = function(data) {
@@ -457,7 +494,8 @@ Client.prototype.open = function(socketId, target) {
 	target.chan.highlight = 0;
 
 	if (target.chan.messages.length > 0) {
-		target.chan.firstUnread = target.chan.messages[target.chan.messages.length - 1].id;
+		target.chan.firstUnread =
+			target.chan.messages[target.chan.messages.length - 1].id;
 	}
 
 	attachedClient.openChannel = target.chan.id;
@@ -474,45 +512,47 @@ Client.prototype.sort = function(data) {
 	}
 
 	switch (data.type) {
-	case "networks":
-		this.networks.sort((a, b) => order.indexOf(a.uuid) - order.indexOf(b.uuid));
+		case "networks":
+			this.networks.sort(
+				(a, b) => order.indexOf(a.uuid) - order.indexOf(b.uuid)
+			);
 
-		// Sync order to connected clients
-		this.emit("sync_sort", {
-			order: this.networks.map((obj) => obj.uuid),
-			type: data.type,
-		});
+			// Sync order to connected clients
+			this.emit("sync_sort", {
+				order: this.networks.map((obj) => obj.uuid),
+				type: data.type,
+			});
 
-		break;
+			break;
 
-	case "channels": {
-		const network = _.find(this.networks, {uuid: data.target});
+		case "channels": {
+			const network = _.find(this.networks, {uuid: data.target});
 
-		if (!network) {
-			return;
-		}
-
-		network.channels.sort((a, b) => {
-			// Always sort lobby to the top regardless of what the client has sent
-			// Because there's a lot of code that presumes channels[0] is the lobby
-			if (a.type === Chan.Type.LOBBY) {
-				return -1;
-			} else if (b.type === Chan.Type.LOBBY) {
-				return 1;
+			if (!network) {
+				return;
 			}
 
-			return order.indexOf(a.id) - order.indexOf(b.id);
-		});
+			network.channels.sort((a, b) => {
+				// Always sort lobby to the top regardless of what the client has sent
+				// Because there's a lot of code that presumes channels[0] is the lobby
+				if (a.type === Chan.Type.LOBBY) {
+					return -1;
+				} else if (b.type === Chan.Type.LOBBY) {
+					return 1;
+				}
 
-		// Sync order to connected clients
-		this.emit("sync_sort", {
-			order: network.channels.map((obj) => obj.id),
-			type: data.type,
-			target: network.uuid,
-		});
+				return order.indexOf(a.id) - order.indexOf(b.id);
+			});
 
-		break;
-	}
+			// Sync order to connected clients
+			this.emit("sync_sort", {
+				order: network.channels.map((obj) => obj.id),
+				type: data.type,
+				target: network.uuid,
+			});
+
+			break;
+		}
 	}
 
 	this.save();
@@ -588,7 +628,8 @@ Client.prototype.clientAttach = function(socketId, token) {
 		}
 
 		if (!network.hostname) {
-			const hostmask = (client.config && client.config.hostname) || client.hostname;
+			const hostmask =
+				(client.config && client.config.hostname) || client.hostname;
 
 			if (hostmask) {
 				save = true;
@@ -618,10 +659,19 @@ Client.prototype.clientDetach = function(socketId) {
 	}
 };
 
-Client.prototype.registerPushSubscription = function(session, subscription, noSave) {
-	if (!_.isPlainObject(subscription) || !_.isPlainObject(subscription.keys)
-	|| typeof subscription.endpoint !== "string" || !/^https?:\/\//.test(subscription.endpoint)
-	|| typeof subscription.keys.p256dh !== "string" || typeof subscription.keys.auth !== "string") {
+Client.prototype.registerPushSubscription = function(
+	session,
+	subscription,
+	noSave
+) {
+	if (
+		!_.isPlainObject(subscription) ||
+		!_.isPlainObject(subscription.keys) ||
+		typeof subscription.endpoint !== "string" ||
+		!/^https?:\/\//.test(subscription.endpoint) ||
+		typeof subscription.keys.p256dh !== "string" ||
+		typeof subscription.keys.auth !== "string"
+	) {
 		session.pushSubscription = null;
 		return;
 	}
@@ -652,13 +702,17 @@ Client.prototype.unregisterPushSubscription = function(token) {
 	});
 };
 
-Client.prototype.save = _.debounce(function SaveClient() {
-	if (Helper.config.public) {
-		return;
-	}
+Client.prototype.save = _.debounce(
+	function SaveClient() {
+		if (Helper.config.public) {
+			return;
+		}
 
-	const client = this;
-	const json = {};
-	json.networks = this.networks.map((n) => n.export());
-	client.manager.updateUser(client.name, json);
-}, 1000, {maxWait: 10000});
+		const client = this;
+		const json = {};
+		json.networks = this.networks.map((n) => n.export());
+		client.manager.updateUser(client.name, json);
+	},
+	1000,
+	{maxWait: 10000}
+);

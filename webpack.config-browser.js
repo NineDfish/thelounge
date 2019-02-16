@@ -4,7 +4,10 @@ const path = require("path");
 const config = require("./webpack.config.js");
 
 config.entry = {
-	"js/bundle.test.js": `mocha-loader!${path.join(__dirname, "test/client/index.js")}`,
+	"js/bundle.test.js": `mocha-loader!${path.join(
+		__dirname,
+		"test/client/index.js"
+	)}`,
 };
 
 // Instrumentation for testing with mocha

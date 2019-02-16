@@ -14,7 +14,9 @@ describe("Link plugin", function() {
 	beforeEach(function(done) {
 		app = util.createWebserver();
 		app.get("/real-test-image.png", function(req, res) {
-			res.sendFile(path.resolve(__dirname, "../../client/img/logo-grey-bg-120x120px.png"));
+			res.sendFile(
+				path.resolve(__dirname, "../../client/img/logo-grey-bg-120x120px.png")
+			);
 		});
 		this.connection = app.listen(9002, done);
 
@@ -36,17 +38,21 @@ describe("Link plugin", function() {
 
 		link(this.irc, this.network.channels[0], message);
 
-		expect(message.previews).to.deep.equal([{
-			body: "",
-			head: "",
-			link: url,
-			thumb: "",
-			type: "loading",
-			shown: true,
-		}]);
+		expect(message.previews).to.deep.equal([
+			{
+				body: "",
+				head: "",
+				link: url,
+				thumb: "",
+				type: "loading",
+				shown: true,
+			},
+		]);
 
 		app.get("/basic", function(req, res) {
-			res.send("<title>test title</title><meta name='description' content='simple description'>");
+			res.send(
+				"<title>test title</title><meta name='description' content='simple description'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
@@ -68,7 +74,9 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/basic-og", function(req, res) {
-			res.send("<title>test</title><meta property='og:title' content='opengraph test'>");
+			res.send(
+				"<title>test</title><meta property='og:title' content='opengraph test'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
@@ -85,7 +93,9 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/duplicate-tags", function(req, res) {
-			res.send("<title>test</title><title>magnifying glass icon</title><meta name='description' content='desc1'><meta name='description' content='desc2'>");
+			res.send(
+				"<title>test</title><title>magnifying glass icon</title><meta name='description' content='desc1'><meta name='description' content='desc2'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
@@ -103,7 +113,9 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/description-og", function(req, res) {
-			res.send("<meta name='description' content='simple description'><meta property='og:description' content='opengraph description'>");
+			res.send(
+				"<meta name='description' content='simple description'><meta property='og:description' content='opengraph description'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
@@ -120,12 +132,16 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/thumb", function(req, res) {
-			res.send("<title>Google</title><meta property='og:image' content='http://localhost:9002/real-test-image.png'>");
+			res.send(
+				"<title>Google</title><meta property='og:image' content='http://localhost:9002/real-test-image.png'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
 			expect(data.preview.head).to.equal("Google");
-			expect(data.preview.thumb).to.equal("http://localhost:9002/real-test-image.png");
+			expect(data.preview.thumb).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
 			done();
 		});
 	});
@@ -138,11 +154,15 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/thumb-image-src", function(req, res) {
-			res.send("<link rel='image_src' href='http://localhost:9002/real-test-image.png'>");
+			res.send(
+				"<link rel='image_src' href='http://localhost:9002/real-test-image.png'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
-			expect(data.preview.thumb).to.equal("http://localhost:9002/real-test-image.png");
+			expect(data.preview.thumb).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
 			done();
 		});
 	});
@@ -155,11 +175,15 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/thumb-image-src", function(req, res) {
-			res.send("<link rel='image_src' href='//localhost:9002/real-test-image.png'>");
+			res.send(
+				"<link rel='image_src' href='//localhost:9002/real-test-image.png'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
-			expect(data.preview.thumb).to.equal("http://localhost:9002/real-test-image.png");
+			expect(data.preview.thumb).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
 			done();
 		});
 	});
@@ -172,13 +196,19 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/relative-thumb", function(req, res) {
-			res.send("<title>test relative image</title><meta property='og:image' content='/real-test-image.png'>");
+			res.send(
+				"<title>test relative image</title><meta property='og:image' content='/real-test-image.png'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
-			expect(data.preview.thumb).to.equal("http://localhost:9002/real-test-image.png");
+			expect(data.preview.thumb).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
 			expect(data.preview.head).to.equal("test relative image");
-			expect(data.preview.link).to.equal("http://localhost:9002/relative-thumb");
+			expect(data.preview.link).to.equal(
+				"http://localhost:9002/relative-thumb"
+			);
 			done();
 		});
 	});
@@ -191,13 +221,19 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/thumb-no-title", function(req, res) {
-			res.send("<meta property='og:image' content='http://localhost:9002/real-test-image.png'>");
+			res.send(
+				"<meta property='og:image' content='http://localhost:9002/real-test-image.png'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
 			expect(data.preview.head).to.equal("Untitled page");
-			expect(data.preview.thumb).to.equal("http://localhost:9002/real-test-image.png");
-			expect(data.preview.link).to.equal("http://localhost:9002/thumb-no-title");
+			expect(data.preview.thumb).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
+			expect(data.preview.link).to.equal(
+				"http://localhost:9002/thumb-no-title"
+			);
 			done();
 		});
 	});
@@ -210,7 +246,9 @@ describe("Link plugin", function() {
 		link(this.irc, this.network.channels[0], message);
 
 		app.get("/thumb-404", function(req, res) {
-			res.send("<title>404 image</title><meta property='og:image' content='http://localhost:9002/this-image-does-not-exist.png'>");
+			res.send(
+				"<title>404 image</title><meta property='og:image' content='http://localhost:9002/this-image-does-not-exist.png'>"
+			);
 		});
 
 		this.irc.once("msg:preview", function(data) {
@@ -230,8 +268,12 @@ describe("Link plugin", function() {
 
 		this.irc.once("msg:preview", function(data) {
 			expect(data.preview.type).to.equal("image");
-			expect(data.preview.link).to.equal("http://localhost:9002/real-test-image.png");
-			expect(data.preview.thumb).to.equal("http://localhost:9002/real-test-image.png");
+			expect(data.preview.link).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
+			expect(data.preview.thumb).to.equal(
+				"http://localhost:9002/real-test-image.png"
+			);
 			done();
 		});
 	});
@@ -243,21 +285,24 @@ describe("Link plugin", function() {
 
 		link(this.irc, this.network.channels[0], message);
 
-		expect(message.previews).to.eql([{
-			body: "",
-			head: "",
-			link: "http://localhost:9002/one",
-			thumb: "",
-			type: "loading",
-			shown: true,
-		}, {
-			body: "",
-			head: "",
-			link: "http://localhost:9002/two",
-			thumb: "",
-			type: "loading",
-			shown: true,
-		}]);
+		expect(message.previews).to.eql([
+			{
+				body: "",
+				head: "",
+				link: "http://localhost:9002/one",
+				thumb: "",
+				type: "loading",
+				shown: true,
+			},
+			{
+				body: "",
+				head: "",
+				link: "http://localhost:9002/two",
+				thumb: "",
+				type: "loading",
+				shown: true,
+			},
+		]);
 
 		app.get("/one", function(req, res) {
 			res.send("<title>first title</title>");
@@ -304,7 +349,9 @@ describe("Link plugin", function() {
 
 	it("should send accept text/html for initial request", function(done) {
 		app.get("/accept-header-html", function(req, res) {
-			expect(req.headers.accept).to.equal("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+			expect(req.headers.accept).to.equal(
+				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+			);
 			res.send();
 			done();
 		});
@@ -318,7 +365,9 @@ describe("Link plugin", function() {
 
 	it("should send accept */* for meta image", function(done) {
 		app.get("/accept-header-thumb", function(req, res) {
-			res.send("<title>404 image</title><meta property='og:image' content='http://localhost:9002/accept-header-thumb.png'>");
+			res.send(
+				"<title>404 image</title><meta property='og:image' content='http://localhost:9002/accept-header-thumb.png'>"
+			);
 		});
 
 		app.get("/accept-header-thumb.png", function(req, res) {
@@ -350,12 +399,12 @@ describe("Link plugin", function() {
 	it("should work on non-ASCII urls", function(done) {
 		const message = this.irc.createMessage({
 			text:
-			"http://localhost:9002/unicode/ıoı-test " +
-			"http://localhost:9002/unicode/русский-текст-test " +
-			"http://localhost:9002/unicode/🙈-emoji-test " +
-			"http://localhost:9002/unicodeq/?q=ıoı-test " +
-			"http://localhost:9002/unicodeq/?q=русский-текст-test " +
-			"http://localhost:9002/unicodeq/?q=🙈-emoji-test",
+				"http://localhost:9002/unicode/ıoı-test " +
+				"http://localhost:9002/unicode/русский-текст-test " +
+				"http://localhost:9002/unicode/🙈-emoji-test " +
+				"http://localhost:9002/unicodeq/?q=ıoı-test " +
+				"http://localhost:9002/unicodeq/?q=русский-текст-test " +
+				"http://localhost:9002/unicodeq/?q=🙈-emoji-test",
 		});
 
 		link(this.irc, this.network.channels[0], message);
@@ -384,7 +433,9 @@ describe("Link plugin", function() {
 			}
 
 			if (previews.length === 5) {
-				expect(message.previews.map((preview) => preview.link)).to.have.members(previews);
+				expect(message.previews.map((preview) => preview.link)).to.have.members(
+					previews
+				);
 				done();
 			}
 		});
@@ -410,14 +461,16 @@ describe("Link plugin", function() {
 
 		link(this.irc, this.network.channels[0], message);
 
-		expect(message.previews).to.deep.equal([{
-			type: "loading",
-			head: "",
-			body: "",
-			thumb: "",
-			link: "http://localhost:9002",
-			shown: true,
-		}]);
+		expect(message.previews).to.deep.equal([
+			{
+				type: "loading",
+				head: "",
+				body: "",
+				thumb: "",
+				link: "http://localhost:9002",
+				shown: true,
+			},
+		]);
 
 		this.irc.once("msg:preview", function(data) {
 			expect(data.preview.link).to.equal("http://localhost:9002");
@@ -427,7 +480,8 @@ describe("Link plugin", function() {
 
 	it("should not try to fetch links with wrong protocol", function() {
 		const message = this.irc.createMessage({
-			text: "ssh://example.com ftp://example.com irc://example.com http:////////example.com",
+			text:
+				"ssh://example.com ftp://example.com irc://example.com http:////////example.com",
 		});
 
 		expect(message.previews).to.be.empty;
@@ -435,7 +489,8 @@ describe("Link plugin", function() {
 
 	it("should not try to fetch links with username or password", function() {
 		const message = this.irc.createMessage({
-			text: "http://root:'some%pass'@hostname/database http://a:%p@c http://a:%p@example.com http://test@example.com",
+			text:
+				"http://root:'some%pass'@hostname/database http://a:%p@c http://a:%p@example.com http://test@example.com",
 		});
 
 		expect(message.previews).to.be.empty;
@@ -513,10 +568,7 @@ describe("Link plugin", function() {
 
 			if (responses === 2) {
 				this.irc.removeListener("msg:preview", cb);
-				expect(requests).to.deep.equal([
-					"first language",
-					"second language",
-				]);
+				expect(requests).to.deep.equal(["first language", "second language"]);
 				done();
 			}
 		};

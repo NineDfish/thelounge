@@ -69,7 +69,11 @@ window.vueMounted = () => {
 	});
 
 	viewport.on("click", "#chat .menu", function(e) {
-		e.currentTarget = $(`#sidebar .chan[data-id="${$(this).closest(".chan").attr("data-id")}"]`)[0];
+		e.currentTarget = $(
+			`#sidebar .chan[data-id="${$(this)
+				.closest(".chan")
+				.attr("data-id")}"]`
+		)[0];
 		return contextMenuFactory.createContextMenu($(this), e).show();
 	});
 
@@ -91,7 +95,10 @@ window.vueMounted = () => {
 		});
 	});
 
-	const openWindow = function openWindow(e, {keepSidebarOpen, pushState, replaceHistory} = {}) {
+	const openWindow = function openWindow(
+		e,
+		{keepSidebarOpen, pushState, replaceHistory} = {}
+	) {
 		const self = $(this);
 		const target = self.attr("data-target");
 
@@ -103,7 +110,9 @@ window.vueMounted = () => {
 		// sidebar specifically. Needs to be done better when window management gets
 		// refactored.
 		const inSidebar = self.parents("#sidebar, #footer").length > 0;
-		const channel = inSidebar ? findChannel(Number(self.attr("data-id"))) : null;
+		const channel = inSidebar
+			? findChannel(Number(self.attr("data-id")))
+			: null;
 
 		if (vueApp.activeChannel) {
 			const {channel: lastChannel} = vueApp.activeChannel;
@@ -114,7 +123,8 @@ window.vueMounted = () => {
 			}
 
 			if (lastChannel.messages.length > 0) {
-				lastChannel.firstUnread = lastChannel.messages[lastChannel.messages.length - 1].id;
+				lastChannel.firstUnread =
+					lastChannel.messages[lastChannel.messages.length - 1].id;
 			}
 
 			if (lastChannel.messages.length > 100) {
@@ -133,15 +143,17 @@ window.vueMounted = () => {
 
 			socket.emit("open", channel ? channel.channel.id : null);
 
-			if (!keepSidebarOpen && $(window).outerWidth() <= utils.mobileViewportPixels) {
+			if (
+				!keepSidebarOpen &&
+				$(window).outerWidth() <= utils.mobileViewportPixels
+			) {
 				slideoutMenu.toggle(false);
 			}
 		}
 
 		const lastActive = $("#windows > .active");
 
-		lastActive
-			.removeClass("active");
+		lastActive.removeClass("active");
 
 		const chan = $(target)
 			.addClass("active")

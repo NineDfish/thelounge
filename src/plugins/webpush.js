@@ -15,7 +15,10 @@ class WebPush {
 			const data = fs.readFileSync(vapidPath, "utf-8");
 			const parsedData = JSON.parse(data);
 
-			if (typeof parsedData.publicKey === "string" && typeof parsedData.privateKey === "string") {
+			if (
+				typeof parsedData.publicKey === "string" &&
+				typeof parsedData.privateKey === "string"
+			) {
 				this.vapidKeys = {
 					publicKey: parsedData.publicKey,
 					privateKey: parsedData.privateKey,
@@ -28,7 +31,9 @@ class WebPush {
 
 			fs.writeFileSync(vapidPath, JSON.stringify(this.vapidKeys, null, "\t"));
 
-			log.info("New VAPID key pair has been generated for use with push subscription.");
+			log.info(
+				"New VAPID key pair has been generated for use with push subscription."
+			);
 		}
 
 		WebPushAPI.setVapidDetails(
@@ -41,7 +46,10 @@ class WebPush {
 	push(client, payload, onlyToOffline) {
 		_.forOwn(client.config.sessions, ({pushSubscription}, token) => {
 			if (pushSubscription) {
-				if (onlyToOffline && _.find(client.attachedClients, {token}) !== undefined) {
+				if (
+					onlyToOffline &&
+					_.find(client.attachedClients, {token}) !== undefined
+				) {
 					return;
 				}
 
@@ -51,14 +59,20 @@ class WebPush {
 	}
 
 	pushSingle(client, subscription, payload) {
-		WebPushAPI
-			.sendNotification(subscription, JSON.stringify(payload))
-			.catch((error) => {
+		WebPushAPI.sendNotification(subscription, JSON.stringify(payload)).catch(
+			(error) => {
 				if (error.statusCode >= 400 && error.statusCode < 500) {
-					log.warn(`WebPush subscription for ${client.name} returned an error (${error.statusCode}), removing subscription`);
+					log.warn(
+						`WebPush subscription for ${client.name} returned an error (${
+							error.statusCode
+						}), removing subscription`
+					);
 
 					_.forOwn(client.config.sessions, ({pushSubscription}, token) => {
-						if (pushSubscription && pushSubscription.endpoint === subscription.endpoint) {
+						if (
+							pushSubscription &&
+							pushSubscription.endpoint === subscription.endpoint
+						) {
 							client.unregisterPushSubscription(token);
 						}
 					});
@@ -67,7 +81,8 @@ class WebPush {
 				}
 
 				log.error(`WebPush Error (${error})`);
-			});
+			}
+		);
 	}
 }
 

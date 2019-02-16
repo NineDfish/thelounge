@@ -8,7 +8,9 @@ const Utils = require("./utils");
 
 program
 	.command("upgrade [packages...]")
-	.description("Upgrade installed themes and packages to their latest versions.")
+	.description(
+		"Upgrade installed themes and packages to their latest versions."
+	)
 	.on("--help", Utils.extraHelp)
 	.action(function(packages) {
 		const fs = require("fs");
@@ -17,12 +19,9 @@ program
 		// Get paths to the location of packages directory
 		const packagesPath = Helper.getPackagesPath();
 		const packagesConfig = path.join(packagesPath, "package.json");
-		const packagesList = JSON.parse(fs.readFileSync(packagesConfig)).dependencies;
-		const argsList = [
-			"upgrade",
-			"--production",
-			"--latest",
-		];
+		const packagesList = JSON.parse(fs.readFileSync(packagesConfig))
+			.dependencies;
+		const argsList = ["upgrade", "--production", "--latest"];
 
 		let count = 0;
 
@@ -54,9 +53,11 @@ program
 			return;
 		}
 
-		return Utils.executeYarnCommand(...argsList).then(() => {
-			log.info("Package(s) have been successfully upgraded.");
-		}).catch((code) => {
-			throw `Failed to upgrade package(s). Exit code ${code}`;
-		});
+		return Utils.executeYarnCommand(...argsList)
+			.then(() => {
+				log.info("Package(s) have been successfully upgraded.");
+			})
+			.catch((code) => {
+				throw `Failed to upgrade package(s). Exit code ${code}`;
+			});
 	});

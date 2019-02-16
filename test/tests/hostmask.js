@@ -35,7 +35,9 @@ describe("Hostmask", function() {
 
 		expect(Helper.parseHostmask("nick!!!!@thing@@host").nick).to.equal("nick");
 		expect(Helper.parseHostmask("nick!!!!@thing@@host").ident).to.equal("*");
-		expect(Helper.parseHostmask("nick!!!!@thing@@host").hostname).to.equal("thing");
+		expect(Helper.parseHostmask("nick!!!!@thing@@host").hostname).to.equal(
+			"thing"
+		);
 
 		expect(Helper.parseHostmask("!!!!@thing@@host").nick).to.equal("*");
 		expect(Helper.parseHostmask("!!!!@thing@@host").ident).to.equal("*");

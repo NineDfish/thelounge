@@ -10,7 +10,11 @@ const Utils = require("../utils");
 
 program
 	.command("edit <name>")
-	.description(`Edit user file located at ${colors.green(Helper.getUserConfigPath("<name>"))}.`)
+	.description(
+		`Edit user file located at ${colors.green(
+			Helper.getUserConfigPath("<name>")
+		)}.`
+	)
 	.on("--help", Utils.extraHelp)
 	.action(function(name) {
 		if (!fs.existsSync(Helper.getUsersPath())) {
@@ -21,7 +25,8 @@ program
 		const ClientManager = require("../../clientManager");
 		const users = new ClientManager().getUsers();
 
-		if (users === undefined) { // There was an error, already logged
+		if (users === undefined) {
+			// There was an error, already logged
 			return;
 		}
 
@@ -36,6 +41,12 @@ program
 			{stdio: "inherit"}
 		);
 		child_spawn.on("error", function() {
-			log.error(`Unable to open ${colors.green(Helper.getUserConfigPath(name))}. ${colors.bold("$EDITOR")} is not set, and ${colors.bold("vi")} was not found.`);
+			log.error(
+				`Unable to open ${colors.green(
+					Helper.getUserConfigPath(name)
+				)}. ${colors.bold("$EDITOR")} is not set, and ${colors.bold(
+					"vi"
+				)} was not found.`
+			);
 		});
 	});

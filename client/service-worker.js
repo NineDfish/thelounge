@@ -51,7 +51,9 @@ function networkOrCache(uri) {
 				}
 
 				// eslint-disable-next-line no-console
-				console.error(`Request for ${uri.href} failed with HTTP ${response.status}`);
+				console.error(
+					`Request for ${uri.href} failed with HTTP ${response.status}`
+				);
 
 				return Promise.reject("request-failed");
 			})
@@ -105,29 +107,33 @@ function showNotification(event, payload) {
 self.addEventListener("notificationclick", function(event) {
 	event.notification.close();
 
-	event.waitUntil(clients.matchAll({
-		includeUncontrolled: true,
-		type: "window",
-	}).then((clientList) => {
-		if (clientList.length === 0) {
-			if (clients.openWindow) {
-				return clients.openWindow(`.#${event.notification.tag}`);
-			}
+	event.waitUntil(
+		clients
+			.matchAll({
+				includeUncontrolled: true,
+				type: "window",
+			})
+			.then((clientList) => {
+				if (clientList.length === 0) {
+					if (clients.openWindow) {
+						return clients.openWindow(`.#${event.notification.tag}`);
+					}
 
-			return;
-		}
+					return;
+				}
 
-		const client = findSuitableClient(clientList);
+				const client = findSuitableClient(clientList);
 
-		client.postMessage({
-			type: "open",
-			channel: event.notification.tag,
-		});
+				client.postMessage({
+					type: "open",
+					channel: event.notification.tag,
+				});
 
-		if ("focus" in client) {
-			client.focus();
-		}
-	}));
+				if ("focus" in client) {
+					client.focus();
+				}
+			})
+	);
 });
 
 function findSuitableClient(clientList) {

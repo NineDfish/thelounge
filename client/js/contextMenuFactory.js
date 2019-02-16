@@ -123,7 +123,8 @@ function addCloseItem() {
 		className: "close",
 		displayName: getCloseDisplay,
 		data: (target) => target.attr("data-target"),
-		callback: (itemData) => utils.closeChan($(`.networks .chan[data-target="${itemData}"]`)),
+		callback: (itemData) =>
+			utils.closeChan($(`.networks .chan[data-target="${itemData}"]`)),
 	});
 }
 
@@ -136,7 +137,8 @@ function addConnectItem() {
 	}
 
 	addContextMenuItem({
-		check: (target) => target.hasClass("lobby") && target.parent().hasClass("not-connected"),
+		check: (target) =>
+			target.hasClass("lobby") && target.parent().hasClass("not-connected"),
 		className: "connect",
 		displayName: "Connect",
 		data: (target) => target.attr("data-id"),
@@ -153,7 +155,8 @@ function addDisconnectItem() {
 	}
 
 	addContextMenuItem({
-		check: (target) => target.hasClass("lobby") && !target.parent().hasClass("not-connected"),
+		check: (target) =>
+			target.hasClass("lobby") && !target.parent().hasClass("not-connected"),
 		className: "disconnect",
 		displayName: "Disconnect",
 		data: (target) => target.attr("data-id"),
@@ -170,7 +173,9 @@ function addKickItem() {
 	}
 
 	addContextMenuItem({
-		check: (target) => utils.hasRoleInChannel(target.closest(".chan"), ["op"]) && target.closest(".chan").attr("data-type") === "channel",
+		check: (target) =>
+			utils.hasRoleInChannel(target.closest(".chan"), ["op"]) &&
+			target.closest(".chan").attr("data-type") === "channel",
 		className: "action-kick",
 		displayName: "Kick",
 		data: (target) => target.attr("data-name"),
@@ -189,7 +194,11 @@ function addOpItem() {
 	addContextMenuItem({
 		check: (target) =>
 			utils.hasRoleInChannel(target.closest(".chan"), ["op"]) &&
-			!utils.hasRoleInChannel(target.closest(".chan"), ["op"], target.attr("data-name")),
+			!utils.hasRoleInChannel(
+				target.closest(".chan"),
+				["op"],
+				target.attr("data-name")
+			),
 		className: "action-op",
 		displayName: "Give operator (+o)",
 		data: (target) => target.attr("data-name"),
@@ -208,7 +217,11 @@ function addDeopItem() {
 	addContextMenuItem({
 		check: (target) =>
 			utils.hasRoleInChannel(target.closest(".chan"), ["op"]) &&
-			utils.hasRoleInChannel(target.closest(".chan"), ["op"], target.attr("data-name")),
+			utils.hasRoleInChannel(
+				target.closest(".chan"),
+				["op"],
+				target.attr("data-name")
+			),
 		className: "action-op",
 		displayName: "Revoke operator (-o)",
 		data: (target) => target.attr("data-name"),
@@ -227,7 +240,11 @@ function addVoiceItem() {
 	addContextMenuItem({
 		check: (target) =>
 			utils.hasRoleInChannel(target.closest(".chan"), ["op"]) &&
-			!utils.hasRoleInChannel(target.closest(".chan"), ["voice"], target.attr("data-name")),
+			!utils.hasRoleInChannel(
+				target.closest(".chan"),
+				["voice"],
+				target.attr("data-name")
+			),
 		className: "action-voice",
 		displayName: "Give voice (+v)",
 		data: (target) => target.attr("data-name"),
@@ -246,7 +263,11 @@ function addDevoiceItem() {
 	addContextMenuItem({
 		check: (target) =>
 			utils.hasRoleInChannel(target.closest(".chan"), ["op"]) &&
-			utils.hasRoleInChannel(target.closest(".chan"), ["voice"], target.attr("data-name")),
+			utils.hasRoleInChannel(
+				target.closest(".chan"),
+				["voice"],
+				target.attr("data-name")
+			),
 		className: "action-voice",
 		displayName: "Revoke voice (-v)",
 		data: (target) => target.attr("data-name"),
@@ -272,7 +293,8 @@ function addFocusItem() {
 	addContextMenuItem({
 		check: (target) => target.hasClass("chan"),
 		className: getClass,
-		displayName: (target) => target.attr("data-name") || target.attr("aria-label"),
+		displayName: (target) =>
+			target.attr("data-name") || target.attr("aria-label"),
 		data: (target) => target.attr("data-target"),
 		callback: focusChan,
 	});

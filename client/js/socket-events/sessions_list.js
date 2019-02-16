@@ -19,7 +19,8 @@ socket.on("sessions:list", function(data) {
 	});
 
 	if (html.length === 0) {
-		html = "<p><em>You are not currently logged in to any other device.</em></p>";
+		html =
+			"<p><em>You are not currently logged in to any other device.</em></p>";
 	}
 
 	$("#session-list").html(html);

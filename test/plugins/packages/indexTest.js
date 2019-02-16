@@ -41,8 +41,9 @@ describe("packages", function() {
 		it("should return details of a registered package after it was loaded", function() {
 			packages.loadPackages();
 
-			expect(packages.getPackage("thelounge-package-foo"))
-				.to.have.key("onServerStart");
+			expect(packages.getPackage("thelounge-package-foo")).to.have.key(
+				"onServerStart"
+			);
 		});
 	});
 
@@ -51,7 +52,9 @@ describe("packages", function() {
 			// Mock `log.info` to extract its effect into a string
 			log.info.restore();
 			let stdout = "";
-			stub(log, "info").callsFake(TestUtil.sanitizeLog((str) => stdout += str));
+			stub(log, "info").callsFake(
+				TestUtil.sanitizeLog((str) => (stdout += str))
+			);
 
 			packages.loadPackages();
 

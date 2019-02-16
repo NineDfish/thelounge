@@ -12,7 +12,9 @@ describe("Nickname highlights", function() {
 
 		expect("").to.not.match(network.highlightRegex);
 		expect("  ").to.not.match(network.highlightRegex);
-		expect("completely unrelated sentence").to.not.match(network.highlightRegex);
+		expect("completely unrelated sentence").to.not.match(
+			network.highlightRegex
+		);
 		expect("foobarlounge-bot").to.not.match(network.highlightRegex);
 		expect("lounge-botfoobar").to.not.match(network.highlightRegex);
 		expect("\x03123lounge-bot").to.not.match(network.highlightRegex);

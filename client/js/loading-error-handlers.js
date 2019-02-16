@@ -14,9 +14,11 @@
 	if (msg) {
 		msg.textContent = "Loading the app…";
 
-		document.getElementById("loading-reload").addEventListener("click", function() {
-			location.reload(true);
-		});
+		document
+			.getElementById("loading-reload")
+			.addEventListener("click", function() {
+				location.reload(true);
+			});
 	}
 
 	var displayReload = function displayReload() {
@@ -42,7 +44,8 @@
 
 	window.g_LoungeErrorHandler = function LoungeErrorHandler(e) {
 		var message = document.getElementById("loading-page-message");
-		message.textContent = "An error has occurred that prevented the client from loading correctly.";
+		message.textContent =
+			"An error has occurred that prevented the client from loading correctly.";
 
 		var summary = document.createElement("summary");
 		summary.textContent = "More details";
@@ -51,7 +54,8 @@
 		data.textContent = e.message; // e is an ErrorEvent
 
 		var info = document.createElement("p");
-		info.textContent = "Open the developer tools of your browser for more information.";
+		info.textContent =
+			"Open the developer tools of your browser for more information.";
 
 		var details = document.createElement("details");
 		details.appendChild(summary);
